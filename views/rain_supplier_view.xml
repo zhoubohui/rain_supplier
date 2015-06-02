@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--将自定义的字段单独放置-->
+    <record model="ir.ui.view" id="supplier_notebook_form_view">
+        <field name="name">supplier_notebook</field>
+        <field name="model">res.partner</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                    <page string="供应商信息" attrs="{'invisible': [('supplier','=', False)]}">
+                        <group>
+                            <group>
+                            <field name="zhengjian" string="营业执照"/>
+                            <field name="shuiwu" string="税务登记"/>
+                            <field name="jgdm" string="组织机构代码"/>
+                            <field name="quyang" string="是否取样"/>
+                            <field name="quyang_text" string="取样信息" attrs="{'invisible': [('quyang','=', False)]}"/>
+                            </group>
+                            <group>
+                                <field name="category" position="replace">
+                                  <field name="category" string="类别"/>
+                                </field>
+                                <field name="category2" string="类别2" groups="__export__.res_groups_85"/>
+                                <field name="is_vip"/>
+                                <field name="supervisor"/>
+                            </group>
+                        </group>
+                    </page>
+            </xpath>
+        </field>
+    </record>
+        <record model="ir.ui.view" id="inherit_supplier_category_search_view">
+			<field name="name">inherit.supplier.category.search.view</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="supplier_category.supplier_category_inheirt_form"/>
+			<field name="arch" type="xml">
+                <field name="category" position="replace">
+					<field name="category" invisible = '1'/>
+                </field>
+			</field>
+		</record>
+        				<record model="ir.ui.view" id="inherit_hm_partner_form_view">
+						<field name="name">inherit.hm.partner.form.view</field>
+						<field name="model">res.partner</field>
+						<field name="inherit_id" ref="rain_china.hm_partner_form_view"/>
+						<field name="arch" type="xml">
+									<field name="is_vip" position="replace">
+                                      <field name="is_vip" invisible = '1'/>
+                                    </field>
+									<field name="supervisor" position="replace">
+                                        <field name="supervisor" invisible = '1'/>
+                                    </field>
+									<!--<field name="contract_type" position="replace">
+                                        <field name="contract_type" invisible = '1'/>
+                                    </field>
+									<field name="supplier_attr" position="replace">
+                                        <field name="supplier_attr" invisible = '1'/>
+                                    </field>-->
+						</field>
+				</record>
+        <record model="ir.ui.view" id="rain_ir_attachment_form_view">
+						<field name="name">rain.ir.attachment.form.view</field>
+						<field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.partner_view_button_contracts_count" />
+            <field name="priority" eval="22"/>
+            <field name="groups_id" eval="[(4, ref('analytic.group_analytic_accounting'))]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='buttons']" position="inside">
+                    <button class="oe_inline oe_stat_button" type="action" name="%(document.view_document_file_tree)d"
+                        icon="fa-book">
+                        <field string="关联的文档" name="attachment_count" widget="statinfo"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+        <record id="action_view_attachment_file_tree" model="ir.actions.act_window">
+            <!--<field name="context">{'search_default_partner_id': [active_id], 'default_partner_id': active_id}</field>-->
+            <field name="name">attachment</field>
+            <field name="res_model">ir.attachment</field>
+            <field name="view_id" ref="document.view_document_file_tree"/>
+            <field name="search_view_id" ref="document.view_document_file_tree"/>
+        </record>
+    </data>
+</openerp>		
